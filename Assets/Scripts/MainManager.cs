@@ -10,7 +10,9 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
+    public string scoreTextValue;
     public Text ScoreText;
+    public Text bestScoreText;
     public GameObject GameOverText;
     
     private bool m_Started = false;
@@ -42,6 +44,7 @@ public class MainManager : MonoBehaviour
     {
         if (!m_Started)
         {
+            setBestScoreText();
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 m_Started = true;
@@ -57,8 +60,8 @@ public class MainManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);                
+}
         }
     }
 
@@ -66,11 +69,30 @@ public class MainManager : MonoBehaviour
     {
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
+        if (setBestScore())
+        {
+            setBestScoreText();
+        }
     }
 
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+    }
+    bool setBestScore()
+    {
+        int bestResult = MainDataManager.Instance.bestScore;
+        if (m_Points > bestResult)
+        {
+            MainDataManager.Instance.bestScore = m_Points;
+            MainDataManager.Instance.bestPlayer = MainDataManager.Instance.playerName;
+            return true;
+        }
+        else return false;
+    }
+    void setBestScoreText()
+    {
+        bestScoreText.text = "Best Score: " + MainDataManager.Instance.bestPlayer + " : " + MainDataManager.Instance.bestScore;
     }
 }
