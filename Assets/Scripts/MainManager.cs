@@ -77,6 +77,7 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        MainDataManager.Instance.SaveScore();
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
